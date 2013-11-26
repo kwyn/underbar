@@ -302,15 +302,14 @@ var _ = { };
 
   // Shuffle an array.
   _.shuffle = function(array) {
-    var copy = [], n = array.length, i;
+    var copy = [];
+    var n = array.length;
+    var i;
     while (n) {
-
       i = Math.floor(Math.random() * n--);
-
-      // And move it to the new array.
       copy.push(array.splice(i, 1)[0]);
     }
-
+    _.each(array, function(value, index){})
     return copy;
   };
 
