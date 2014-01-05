@@ -272,7 +272,7 @@ var _ = { };
   _.memoize = function(func) {
     var prevArguments = [];
     var prevResults = [];
-    var returnFunc = function(index){
+    var returnFunc = function(){
       if( _.contains(prevArguments, arguments) ){
         return prevResults[_.indexOf(prevArguments, arguments)];
       }else{
@@ -291,7 +291,8 @@ var _ = { };
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait){
-    return setTimeout(function(){ return func.apply(this, arguments); }, wait);
+    var args = Array.prototype.slice.call(arguments, 2);
+    return setTimeout(function(){ return func.apply(this, args); }, wait);
   };
 
 
