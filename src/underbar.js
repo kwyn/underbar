@@ -69,7 +69,7 @@ var _ = { };
   _.filter = function(collection, iterator) {
     var hits = [];
     _.each(collection, function(value){ 
-      if(iterator(value)==true){
+      if(iterator(value)){
         hits.push(value);
       } 
     });
@@ -80,18 +80,30 @@ var _ = { };
   _.reject = function(collection, iterator) {
     // TIP: see if you can re-use _.select() here, without simply
     // copying code in and modifying it
-    return _.filter(collection, function(value){ if(iterator(value)==false){return true;} });
+    return _.filter(collection, function(value){ return !iterator(value);});
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-    var unique = [];
+    /*var unique = [];
     _.each(array, function(value){
       if(_.indexOf(unique, value) == -1){
         unique.push(value);
       }
     });
-    return unique;
+  */
+  var uniques = {};
+  var results = [];
+
+  _.each(array, function(value) {
+    uniques[value] = value;
+  });
+
+  _.each(uniques, function(value){
+    restuls.push(value);
+  });
+  
+    return results;
   };
 
 
@@ -269,20 +281,22 @@ var _ = { };
   // Memoize should return a function that when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
-  _.memoize = function(func) {
-    var prevArguments = [];
-    var prevResults = [];
-    var returnFunc = function(){
-      if( _.contains(prevArguments, arguments) ){
-        return prevResults[_.indexOf(prevArguments, arguments)];
-      }else{
-        prevArguments.push(arguments);
-        prevResults.push(func.apply(this, arguments));
-        return func.apply(this,arguments);
-      }
-    };
-    return returnFunc;
+  _.memoize = function(func){
+    var previous = {};
+    var results;
+    return function(){
+        debugger;
+        if(previous[arguments] === undefined){
+          return previous[arguments];
+        }else{
+          results = func.apply(null, args);
+          previous[arguments] = results;
+          return results;
+        }
+      };
+      
   };
+
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -292,7 +306,7 @@ var _ = { };
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait){
     var args = Array.prototype.slice.call(arguments, 2);
-    return setTimeout(function(){ return func.apply(this, args); }, wait);
+    return setTimeout(function(){ return func.apply(null, args); }, wait);
   };
 
 
